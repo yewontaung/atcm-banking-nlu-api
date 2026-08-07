@@ -19,3 +19,7 @@ class AccountForm(BaseDto):
     @property
     def valid(self) -> bool:
         return self.password == self.confirm_password
+
+class SignInForm(BaseDto):
+    email:EmailStr
+    password:str = Field(min_length=6)

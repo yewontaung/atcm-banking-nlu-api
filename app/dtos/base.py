@@ -1,6 +1,7 @@
-from typing import Any, Optional
+import math
+from typing import Any, Generic, Optional, TypeVar
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, computed_field
 from pydantic.alias_generators import to_camel
 
 class BaseDto(BaseModel):
@@ -14,3 +15,17 @@ class ModificationResult(BaseDto):
     result_item:Any
     success:bool
     message:Optional[str] = None
+
+
+T = TypeVar("T")
+class PageResult(BaseDto, Generic[T]):
+
+    items:list[T]
+    page:int
+    size:int
+    total:int
+
+    @computed_field
+    @property
+    def pages(self) -> int:
+        return math.ceil(self.total / self.size)
