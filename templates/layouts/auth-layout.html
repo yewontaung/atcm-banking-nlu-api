@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Authentication - ATCM Banking API Developer Platform{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      {% block content %}
+      {% endblock %}
+
+      <div class="auth-footer">
+        &copy; 2026 ATCM Banking Group. Developer Portal.<br>
+        <a href="/web/welcome" style="color:var(--text-muted); font-size:12px;">Platform Overview</a> &bull; 
+        <a href="/web/api-keys" style="color:var(--text-muted); font-size:12px;">My Keys</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

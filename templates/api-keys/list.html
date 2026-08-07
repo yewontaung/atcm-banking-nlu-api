@@ -1,0 +1,97 @@
+{% extends "layouts/main-layout.html" %}
+
+{% block title %}My API Keys - ATCM Banking API{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-flex">
+    <div>
+      <h1 class="page-title"><i class="fas fa-key" style="color: var(--primary);"></i> My API Keys</h1>
+      <p class="page-description">Manage access credentials for ATCM Banking Agentic NLP APIs.</p>
+    </div>
+    <a href="/web/api-keys/create" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Create New Key
+    </a>
+  </div>
+</div>
+
+<!-- Bearer Token Authentication Guide Box -->
+<div class="card" style="margin-bottom: 24px; background: var(--bg-surface); border-color: var(--border-color);">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+    <div style="width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--primary-dim); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 14px;">
+      <i class="fas fa-code"></i>
+    </div>
+    <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main);">Authentication Guide: Bearer Token</h3>
+  </div>
+  <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+    To authenticate HTTP requests to ATCM Banking APIs, include your key in the <code>Authorization</code> header using the <strong>Bearer</strong> scheme:
+  </p>
+
+  <div style="background: var(--bg-darkest); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px; font-family: var(--font-mono); font-size: 13px; color: var(--primary-light); display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <code>Authorization: Bearer atcm_live_your_api_key_here</code>
+    <button class="btn btn-secondary btn-sm" data-copy="Authorization: Bearer atcm_live_your_api_key_here">
+      <i class="fas fa-copy"></i> Copy Header
+    </button>
+  </div>
+</div>
+
+<!-- API Keys Table -->
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Project Name</th>
+        <th>Key Prefix</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Created Date</th>
+        <th style="text-align: right;">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if keys and keys | length > 0 %}
+        {% for k in keys %}
+        <tr>
+          <td>
+            <div class="cell-truncate" style="font-weight: 700; color: var(--text-main);" title="{{ k.projectName }}">{{ k.projectName }}</div>
+          </td>
+          <td>
+            <span class="key-masked" title="{{ k.maskedKey }}">{{ k.maskedKey }}</span>
+          </td>
+          <td>
+            <span class="cell-truncate-lg" style="font-size: 13px; color: var(--text-muted);" title="{{ k.description or 'No description provided' }}">{{ k.description or 'No description provided' }}</span>
+          </td>
+          <td>
+            {% if k.status == 'Active' %}
+              <span class="badge badge-active"><i class="fas fa-check-circle"></i> Active</span>
+            {% else %}
+              <span class="badge badge-deactivated"><i class="fas fa-ban"></i> Deactivated</span>
+            {% endif %}
+          </td>
+          <td style="font-size: 13px;" title="{{ k.createdAt }}">{{ k.createdAt }}</td>
+          <td style="text-align: right;">
+            {% if k.status == 'Active' %}
+              <form action="/web/api-keys/deactivate" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to deactivate this API key?');">
+                <input type="hidden" name="keyId" value="{{ k.id }}">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <i class="fas fa-power-off"></i> Deactivate
+                </button>
+              </form>
+            {% else %}
+              <span style="font-size: 12px; color: var(--text-muted);">Disabled</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
+            <i class="fas fa-key" style="font-size: 28px; margin-bottom: 10px; display: block; color: var(--border-hover);"></i>
+            No API keys generated yet. Click <strong>"Create New Key"</strong> above to get started.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

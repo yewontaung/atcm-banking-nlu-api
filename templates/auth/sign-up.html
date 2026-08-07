@@ -1,0 +1,69 @@
+{% extends "layouts/auth-layout.html" %}
+
+{% block title %}Sign Up - ATCM Banking API{% endblock %}
+
+{% block content %}
+<div class="auth-header">
+  <div class="brand-logo" style="justify-content: center; margin-bottom: 12px;">
+    <div class="logo-icon"><i class="fas fa-brain"></i></div>
+    <span>ATCM Platform</span>
+  </div>
+  <h1 class="auth-title">Create Account</h1>
+  <p class="auth-subtitle">Get developer API keys for ATCM Banking Model</p>
+</div>
+
+{% if error %}
+<div style="background: var(--danger-bg); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--danger); padding: 10px 14px; border-radius: var(--radius-md); font-size: 13px; margin-bottom: 16px; text-align: center;">
+  <i class="fas fa-exclamation-circle"></i> {{ error }}
+</div>
+{% endif %}
+
+<!-- Quick Fill Helper Button -->
+<div style="margin-bottom: 16px;">
+  <button type="button" id="fillSignUp" class="btn btn-secondary btn-sm btn-block">
+    <i class="fas fa-magic" style="color: var(--primary);"></i> Quick Auto-Fill
+  </button>
+</div>
+
+<form action="/web/auth/sign-up" method="POST">
+  <div class="form-group">
+    <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
+    <div class="input-group">
+      <span class="input-icon-left"><i class="fas fa-user"></i></span>
+      <input type="text" id="fullName" name="fullName" class="form-control input-with-icon-left" placeholder="Alex Morgan" required autocomplete="name">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="email">Email Address <span class="required">*</span></label>
+    <div class="input-group">
+      <span class="input-icon-left"><i class="fas fa-envelope"></i></span>
+      <input type="email" id="email" name="email" class="form-control input-with-icon-left" placeholder="alex@company.com" required autocomplete="email">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="password">Password <span class="required">*</span></label>
+    <div class="input-group">
+      <span class="input-icon-left"><i class="fas fa-lock"></i></span>
+      <input type="password" id="password" name="password" class="form-control input-with-icon-left" placeholder="••••••••" required autocomplete="new-password">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="confirmPassword">Confirm Password <span class="required">*</span></label>
+    <div class="input-group">
+      <span class="input-icon-left"><i class="fas fa-check-double"></i></span>
+      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control input-with-icon-left" placeholder="••••••••" required autocomplete="new-password">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 16px;">
+    Create Account <i class="fas fa-arrow-right"></i>
+  </button>
+</form>
+
+<div class="auth-footer">
+  Already registered? <a href="/web/auth/sign-in" style="font-weight: 600;">Sign in here</a>
+</div>
+{% endblock %}

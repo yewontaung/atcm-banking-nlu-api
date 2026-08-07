@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Console - ATCM Banking API Developer Platform{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/admin.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Admin Navigation Header -->
+  <nav class="navbar">
+    <div class="container navbar-inner admin-navbar-inner">
+      <a href="/web/admin/dashboard" class="brand-logo">
+        <div class="logo-icon" style="background:linear-gradient(135deg, #06b6d4 0%, #10b981 100%);"><i class="fas fa-user-shield"></i></div>
+        <span>ATCM Admin Console</span>
+        <span class="logo-tag" style="background:rgba(239, 68, 68, 0.15); color:#ef4444; border-color:rgba(239, 68, 68, 0.3);">ADMIN</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Toggle dark/light mode">
+          <i id="themeToggleIcon" class="fas fa-sun"></i>
+        </button>
+
+        <a href="/web/api-keys" class="btn btn-secondary btn-sm" title="Developer Portal">
+          <i class="fas fa-arrow-left"></i> <span class="hide-mobile-text">Developer Portal</span>
+        </a>
+
+        <div class="user-profile-menu">
+          <div class="avatar" style="background:#ef4444; color:#fff;">A</div>
+          <div class="user-meta hide-mobile-meta">
+            <span class="user-name">System Administrator</span>
+            <span class="user-role">SuperAdmin</span>
+          </div>
+          <a href="/web/auth/sign-out" class="btn btn-secondary btn-sm" style="margin-left: 4px;" title="Sign Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin Grid Layout -->
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div>
+        <div class="admin-section-title">Core Management</div>
+        <ul class="admin-sidebar-nav">
+          <li>
+            <a href="/web/admin/dashboard?view=keys" class="admin-nav-item {% if view == 'keys' or not view %}active{% endif %}">
+              <i class="fas fa-key" style="margin-right: 8px;"></i> API Keys
+            </a>
+          </li>
+          <li>
+            <a href="/web/admin/dashboard?view=users" class="admin-nav-item {% if view == 'users' %}active{% endif %}">
+              <i class="fas fa-users" style="margin-right: 8px;"></i> Developer Accounts
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

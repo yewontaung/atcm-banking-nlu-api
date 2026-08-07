@@ -1,0 +1,72 @@
+{% extends "layouts/main-layout.html" %}
+
+{% block title %}Create API Key - ATCM Banking API{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-header-flex">
+    <div>
+      <h1 class="page-title"><i class="fas fa-key" style="color: var(--primary);"></i> Generate API Key</h1>
+      <p class="page-description">Generate a secure API key to access the ATCM Agentic Banking NLP Model.</p>
+    </div>
+    <a href="/web/api-keys" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Back to My Keys
+    </a>
+  </div>
+</div>
+
+<div style="max-width: 680px;">
+  {% if newKey %}
+  <!-- Success Notification Box showing Key ONCE with Copy Button -->
+  <div class="card" style="border-color: var(--primary); background: rgba(16, 185, 129, 0.04); margin-bottom: 28px;">
+    <div style="display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px;">
+      <div style="width: 38px; height: 38px; border-radius: var(--radius-md); background: var(--primary-dim); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px;">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <div>
+        <h3 style="font-size: 16px; font-weight: 700; color: var(--primary-light);">API Key Successfully Generated!</h3>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">
+          <strong>Important:</strong> Copy your API key now. For security reasons, it will <u>never be displayed again</u>.
+        </p>
+      </div>
+    </div>
+
+    <div class="key-display-wrapper">
+      <div id="newKeyText" class="key-value">{{ newKey }}</div>
+      <button type="button" class="btn btn-primary btn-sm" onclick="copyApiKey('{{ newKey }}')">
+        <i class="fas fa-copy"></i> Copy Key
+      </button>
+    </div>
+
+    <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+      <i class="fas fa-info-circle"></i> Project Name: <strong>{{ newProjectName }}</strong>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <form action="/web/api-keys/create" method="POST">
+      <!-- Hidden User ID field as requested -->
+      <input type="hidden" name="userId" value="{{ user.id }}">
+
+      <div class="form-group">
+        <label class="form-label" for="projectName">Project Name <span class="required">*</span></label>
+        <input type="text" id="projectName" name="projectName" class="form-control" placeholder="e.g. Banking Assistant Bot, Credit Scoring Agent" required autocomplete="off">
+        <div class="form-hint">Identify which app or system will use this key.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Description <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+        <textarea id="description" name="description" class="form-control" placeholder="Brief explanation of the integration scope or purpose..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+        <a href="/web/api-keys" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Generate Key
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

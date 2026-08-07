@@ -1,10 +1,14 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.data import database
 from app.handlers.exception_handler import handle_value_error
 from app.utils import env
+from app.utils.exceptions import WebAuthException
+from app.web.configs import web_routes
+from app.web.handlers.exception_handler import handle_web_auth_exception
 
 
 @asynccontextmanager
@@ -31,3 +35,13 @@ app.include_router(prefix=f"/api/v{env.API_VERSION}", router=routes.authenticate
 app.include_router(prefix=f"/api/v{env.API_VERSION}", router=routes.nlu_router)
 
 app.add_exception_handler(ValueError, handle_value_error)
+
+# web config
+app.mount(
+    "/static",
+    StaticFiles(directory="./static"),
+    name="static"
+)
+
+app.include_router(prefix=f"/web", router=web_routes.controller, tags=["web"])
+app.add_exception_handler(WebAuthException, handle_web_auth_exception)

@@ -5,6 +5,7 @@ from app.data.models import Account
 from app.deps import auth
 from app.dtos.inputs import SignInForm
 from app.dtos.outputs import AuthResult
+from app.utils.auth_token import encode_token
 from app.utils.hashing import verify_password
 
 
@@ -15,7 +16,7 @@ def sign_in(form:SignInForm, session:Session) -> AuthResult:
 
     if not verify_password(form.password, account.hashed_password):
         raise ValueError(f"Wrong password.")
-    token = auth.encode_token({
+    token = encode_token({
         "account_id": account.account_id,
         "account_email": account.account_email,
         "full_name": account.full_name,

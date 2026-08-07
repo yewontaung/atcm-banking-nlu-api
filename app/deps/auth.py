@@ -3,44 +3,28 @@ from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
-import jwt
 from sqlmodel import Session, select
 
 from app.data.database import get_session, safe_call
 from app.data.enums import APIKeyStatus
 from app.data.models import APIKey, Account
-from app.utils import env
+from app.utils.auth_token import decode_token
 from app.utils.hashing import hash_api_key
 
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/access-token")
 api_key_schema = OAuth2PasswordBearer(tokenUrl="/api-key-token")
 
-def encode_token(payload:dict[str, Any]):
-    token = jwt.encode(payload, env.JWT_SECRET, algorithm=env.ALGO)
-
-    return token
-
-def decode_token(token:str):
-    payload = jwt.decode(token, env.JWT_SECRET, algorithms=env.ALGO)
-    return payload
-
 def require_authentication(request:Request, token:str = Depends(oauth2_schema), session:Session = Depends(get_session)):
-    try:
-        payload = decode_token(token)
-        account = safe_call(session.get(Account, payload.get("account_id")), "Account", "account_id", payload.get("account_id"))
-        if payload.get("account_email") != account.account_email or payload.get("account_role") != account.account_role:
-            raise HTTPException(
-                status_code=HTTPStatus.UNAUTHORIZED,
-                detail="Invalid token."
-            )
-        request.state.authentication = account
-        return account
-    except Exception as e:
+    payload = decode_token(token)
+    account = safe_call(session.get(Account, payload.get("account_id")), "Account", "account_id", payload.get("account_id"))
+    if payload.get("account_email") != account.account_email or payload.get("account_role") != account.account_role:
         raise HTTPException(
             status_code=HTTPStatus.UNAUTHORIZED,
-            detail=str(e)
+            detail="Invalid token."
         )
+    request.state.authentication = account
+    return account
 
 def authentication(request:Request) -> Account:
     if not hasattr(request.state, "authentication"):

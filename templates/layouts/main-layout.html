@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ATCM Banking API Developer Platform{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="/web/welcome" class="brand-logo">
+        <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+        <span>ATCM Banking</span>
+        <span class="logo-tag">DEV PLATFORM</span>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li>
+          <a href="/web/welcome" class="nav-link {% if active_page == 'welcome' %}active{% endif %}">
+            <i class="fas fa-home"></i> Overview
+          </a>
+        </li>
+        <li>
+          <a href="/web/api-keys" class="nav-link {% if active_page == 'list' %}active{% endif %}">
+            <i class="fas fa-key"></i> My API Keys
+          </a>
+        </li>
+        <li>
+          <a href="/web/api-keys/create" class="nav-link {% if active_page == 'create' %}active{% endif %}">
+            <i class="fas fa-plus-circle"></i> Create Key
+          </a>
+        </li>
+        <li>
+          <a href="/web/admin/dashboard" class="nav-link {% if active_page == 'admin' %}active{% endif %}">
+            <i class="fas fa-user-shield"></i> Admin Console
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" title="Toggle dark/light mode">
+          <i id="themeToggleIcon" class="fas fa-sun"></i>
+        </button>
+
+        {% if user %}
+        <div class="user-profile-menu">
+          <div class="avatar">{{ user.fullName[0] | upper if user.fullName else 'U' }}</div>
+          <div class="user-meta">
+            <span class="user-name">{{ user.fullName }}</span>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+          <a href="/web/auth/sign-out" class="btn btn-secondary btn-sm" style="margin-left: 8px;" title="Sign Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+        {% else %}
+        <a href="/web/auth/sign-in" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="/web/auth/sign-up" class="btn btn-primary btn-sm">Sign Up</a>
+        {% endif %}
+
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </main>
+
+  <footer style="border-top:1px solid var(--border-color); padding: 28px 0; background: var(--bg-surface); color: var(--text-muted); font-size:13px; margin-top: auto;">
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+      <div>
+        <strong>ATCM Banking API Developer Platform</strong> &bull; &copy; 2026 Financial Services Inc.
+      </div>
+      <div style="display:flex; gap:20px;">
+        <a href="/web/welcome" style="color:var(--text-muted);">Overview</a>
+        <a href="/web/api-keys" style="color:var(--text-muted);">API Keys</a>
+        <a href="/web/auth/sign-in" style="color:var(--text-muted);">Account</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
