@@ -9,10 +9,10 @@ from app.data.database import get_session, safe_call
 from app.data.models import Account
 from app.utils.auth_token import decode_token
 from app.utils.exceptions import WebAuthException
-from app.web.deps.advisor import hanle_web_exception
+from app.web.deps.advisor import handle_web_exception
 
 
-@hanle_web_exception("/web/auth/sign-in")
+@handle_web_exception("/web/auth/sign-in")
 def require_web_authentication(request:Request, session:Session = Depends(get_session)):
     token = request.cookies.get("access_token")
     if not token:
