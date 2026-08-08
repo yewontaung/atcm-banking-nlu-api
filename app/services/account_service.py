@@ -1,4 +1,4 @@
-from sqlmodel import Session, select
+from sqlmodel import Session, desc, select
 
 from app.data.database import safe_call
 from app.data.models import Account
@@ -28,3 +28,9 @@ def create(form:AccountForm, session:Session) -> ModificationResult:
 def find_by_id(account_id:int, session:Session) -> AccountProfile:
     account = safe_call(session.get(Account, account_id), "Account", "account_id", account_id)
     return AccountProfile.from_(account)
+
+def find_all(session:Session) -> list[AccountProfile]:
+    result = session.exec(
+        select(Account).order_by(desc(Account.created_at))
+    ).all()
+    return [AccountProfile.from_(item) for item in result]

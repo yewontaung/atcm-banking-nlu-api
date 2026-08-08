@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="/static/css/style.css">
   {% block head %}{% endblock %}
 </head>
+
 <body>
 
   <!-- Navigation Bar -->
@@ -21,7 +23,7 @@
 
       <ul class="nav-menu" id="navMenu">
         <li>
-          <a href="/web/welcome" class="nav-link {% if active_page == 'welcome' %}active{% endif %}">
+          <a href="/web/overview" class="nav-link {% if active_page == 'welcome' %}active{% endif %}">
             <i class="fas fa-home"></i> Overview
           </a>
         </li>
@@ -35,11 +37,13 @@
             <i class="fas fa-plus-circle"></i> Create Key
           </a>
         </li>
-        <li>
-          <a href="/web/admin/dashboard" class="nav-link {% if active_page == 'admin' %}active{% endif %}">
-            <i class="fas fa-user-shield"></i> Admin Console
-          </a>
-        </li>
+        {% if user.account_role.value == 'Admin'%}
+          <li>
+            <a href="/web/admin/dashboard" class="nav-link {% if active_page == 'admin' %}active{% endif %}">
+              <i class="fas fa-user-shield"></i> Admin Console
+            </a>
+          </li>
+        {% endif %}
       </ul>
 
       <div class="nav-actions">
@@ -50,14 +54,16 @@
 
         {% if user %}
         <div class="user-profile-menu">
-          <div class="avatar">{{ user.fullName[0] | upper if user.fullName else 'U' }}</div>
+          <div class="avatar">{{ user.full_name[0] | upper if user.full_name else 'U' }}</div>
           <div class="user-meta">
-            <span class="user-name">{{ user.fullName }}</span>
-            <span class="user-role">{{ user.role }}</span>
+            <span class="user-name">{{ user.full_name }}</span>
+            <span class="user-role">{{ user.account_role.value }}</span>
           </div>
-          <a href="/web/auth/sign-out" class="btn btn-secondary btn-sm" style="margin-left: 8px;" title="Sign Out">
+          <a id="signOutBtn" role="button" class="btn btn-secondary btn-sm" style="margin-left: 8px;" title="Sign Out">
             <i class="fas fa-sign-out-alt"></i>
           </a>
+          <form id="signOutForm" action="/web/auth/sign-out" method="post" style="display: none;"></form>
+          <script src="{{url_for('static', path='js/sign-out.js')}}"></script>
         </div>
         {% else %}
         <a href="/web/auth/sign-in" class="btn btn-secondary btn-sm">Sign In</a>
@@ -79,8 +85,10 @@
     </div>
   </main>
 
-  <footer style="border-top:1px solid var(--border-color); padding: 28px 0; background: var(--bg-surface); color: var(--text-muted); font-size:13px; margin-top: auto;">
-    <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+  <footer
+    style="border-top:1px solid var(--border-color); padding: 28px 0; background: var(--bg-surface); color: var(--text-muted); font-size:13px; margin-top: auto;">
+    <div class="container"
+      style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
       <div>
         <strong>ATCM Banking API Developer Platform</strong> &bull; &copy; 2026 Financial Services Inc.
       </div>
@@ -95,4 +103,5 @@
   <script src="/static/js/main.js"></script>
   {% block scripts %}{% endblock %}
 </body>
+
 </html>

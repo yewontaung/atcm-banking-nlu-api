@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import EmailStr, Field
 
 from app.dtos.base import BaseDto
@@ -9,6 +11,7 @@ class PredictionForm(BaseDto):
 class APIKeyForm(BaseDto):
     user_id:int
     project_name:str
+    description:Optional[str] = None
 
 class AccountForm(BaseDto):
     full_name:str

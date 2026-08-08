@@ -7,7 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initQuickFill();
   initCopyButtons();
+  initErrorFilter();
 });
+
+function initErrorFilter() {
+  // 1. Parse URL query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const errorMessage = urlParams.get('error');
+
+  // 2. If 'error' parameter exists in URL, show toast
+  if (errorMessage) {
+    showToast(errorMessage, "error");
+  }
+}
 
 /* Theme Toggle (Dark/Light) */
 function initThemeToggle() {
@@ -160,7 +172,7 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  toast.innerHTML = `<i class="fas fa-check-circle" style="color: var(--primary);"></i> <span>${message}</span>`;
+  toast.innerHTML = `<i class="fas ${type === 'successs' ? 'fa-check-circle' : 'fa-circle-xmark'}" style="color: var(${type === 'success' ? '--primary' : '--danger'});"></i> <span>${message}</span>`;
 
   toastContainer.appendChild(toast);
 

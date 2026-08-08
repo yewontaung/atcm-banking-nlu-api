@@ -47,8 +47,7 @@
   <div class="card">
     <form action="/web/api-keys/create" method="POST">
       <!-- Hidden User ID field as requested -->
-      <input type="hidden" name="userId" value="{{ user.id }}">
-
+      <input type="hidden" name="userId" value="{{ user.account_id }}">
       <div class="form-group">
         <label class="form-label" for="projectName">Project Name <span class="required">*</span></label>
         <input type="text" id="projectName" name="projectName" class="form-control" placeholder="e.g. Banking Assistant Bot, Credit Scoring Agent" required autocomplete="off">

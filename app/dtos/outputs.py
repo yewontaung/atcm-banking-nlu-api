@@ -11,6 +11,7 @@ from app.dtos.base import BaseDto
 class AuthResult(BaseDto):
 
     account_id:int
+    account_role:AccountRole | None = None
 
     access_token:str
     access_type:str = "Bearer"
@@ -25,6 +26,7 @@ class AccountProfile(BaseDto):
     full_name:str
     account_email:str
     account_role:AccountRole
+    is_active:bool
     created_at:datetime
     updated_at:datetime | None
 
@@ -35,6 +37,7 @@ class AccountProfile(BaseDto):
             full_name=account.full_name,
             account_email=account.account_email,
             account_role=account.account_role,
+            is_active=account.is_active,
             created_at=account.created_at,
             updated_at=account.updated_at,
         )
@@ -52,12 +55,14 @@ class APIKeyResult(BaseDto):
 class APIKeyListItem(BaseDto):
     key_id:int
     project_name:str
+    hashed_key:str
     creator_id:int
     creator_name:str
     creator_email:str
     status:APIKeyStatus
     created_at:datetime
     updated_at:datetime
+    description:Optional[str] = None
     updator_id:Optional[int] = None
     updator_name:Optional[str] = None
     updator_email:Optional[str] = None
@@ -69,6 +74,8 @@ class APIKeyListItem(BaseDto):
         return APIKeyListItem(
             key_id=api_key.key_id,
             project_name=api_key.project_name,
+            hashed_key=api_key.hashed_api_token,
+            description=api_key.description,
             status=api_key.status,
             creator_id=creator.account_id,
             creator_email=creator.account_email,
@@ -80,3 +87,9 @@ class APIKeyListItem(BaseDto):
             updated_at=api_key.updated_at,
             updator_role=updator.account_role if updator else None,
         )
+
+class DashboardInfo(BaseDto):
+    total_users:int
+    total_keys:int
+    active_keys:int
+    deactivated_keys:int

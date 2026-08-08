@@ -20,7 +20,7 @@
     </div>
     <div>
       <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total Users</div>
-      <div style="font-size: 24px; font-weight: 800; color: var(--text-main);">{{ stats.totalUsers }}</div>
+      <div style="font-size: 24px; font-weight: 800; color: var(--text-main);">{{ stats.total_users }}</div>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
     </div>
     <div>
       <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total API Keys</div>
-      <div style="font-size: 24px; font-weight: 800; color: var(--text-main);">{{ stats.totalKeys }}</div>
+      <div style="font-size: 24px; font-weight: 800; color: var(--text-main);">{{ stats.total_keys }}</div>
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     </div>
     <div>
       <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Active Keys</div>
-      <div style="font-size: 24px; font-weight: 800; color: var(--success);">{{ stats.activeKeys }}</div>
+      <div style="font-size: 24px; font-weight: 800; color: var(--success);">{{ stats.active_keys }}</div>
     </div>
   </div>
 
@@ -50,22 +50,22 @@
     </div>
     <div>
       <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Deactivated Keys</div>
-      <div style="font-size: 24px; font-weight: 800; color: var(--danger);">{{ stats.deactivatedKeys }}</div>
+      <div style="font-size: 24px; font-weight: 800; color: var(--danger);">{{ stats.deactivated_keys }}</div>
     </div>
   </div>
 </div>
 
 <!-- Tab Navigation: API Key Management / User Management -->
 <div style="margin-bottom: 24px; border-bottom: 1px solid var(--border-color); display: flex; gap: 16px;">
-  <a href="/web/admin/dashboard?view=keys" class="btn btn-secondary {% if view == 'keys' %}active{% endif %}" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; {% if view == 'keys' %}border-bottom-color: var(--primary); color: var(--primary); background: var(--primary-dim);{% endif %}">
-    <i class="fas fa-key"></i> API Keys Management ({{ allKeys | length }})
+  <a href="/web/admin/dashboard?view=keys" class="btn btn-secondary {% if request.query_params.view == 'keys' %}active{% endif %}" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; {% if request.query_params.view == 'keys' %}border-bottom-color: var(--primary); color: var(--primary); background: var(--primary-dim);{% endif %}">
+    <i class="fas fa-key"></i> API Keys Management ({{ keys | length }})
   </a>
-  <a href="/web/admin/dashboard?view=users" class="btn btn-secondary {% if view == 'users' %}active{% endif %}" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; {% if view == 'users' %}border-bottom-color: var(--primary); color: var(--primary); background: var(--primary-dim);{% endif %}">
-    <i class="fas fa-users"></i> User Management ({{ allUsers | length }})
+  <a href="/web/admin/dashboard?view=users" class="btn btn-secondary {% if request.query_params.view == 'users' %}active{% endif %}" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0; {% if request.query_params.view == 'users' %}border-bottom-color: var(--primary); color: var(--primary); background: var(--primary-dim);{% endif %}">
+    <i class="fas fa-users"></i> User Management ({{ users | length }})
   </a>
 </div>
 
-{% if view == 'keys' %}
+{% if request.query_params.view == 'keys' %}
 <!-- API Keys Management Table -->
 <div class="table-responsive">
   <table class="table">
@@ -80,27 +80,27 @@
       </tr>
     </thead>
     <tbody>
-      {% if allKeys and allKeys | length > 0 %}
-        {% for k in allKeys %}
+      {% if keys and keys | length > 0 %}
+        {% for k in keys %}
         <tr>
           <td>
-            <div class="cell-truncate" style="font-weight: 600; color: var(--text-main);" title="{{ k.userName }}">{{ k.userName }}</div>
-            <div class="cell-truncate" style="font-size: 12px; color: var(--text-muted);" title="{{ k.userEmail }}">{{ k.userEmail }}</div>
+            <div class="cell-truncate" style="font-weight: 600; color: var(--text-main);" title="{{ k.userName }}">{{ k.creator_name }}</div>
+            <div class="cell-truncate" style="font-size: 12px; color: var(--text-muted);" title="{{ k.userEmail }}">{{ k.creator_email }}</div>
           </td>
           <td>
-            <div class="cell-truncate" style="font-weight: 600; color: var(--text-main);" title="{{ k.projectName }}">{{ k.projectName }}</div>
+            <div class="cell-truncate" style="font-weight: 600; color: var(--text-main);" title="{{ k.projectName }}">{{ k.project_name }}</div>
           </td>
           <td>
-            <span class="key-masked" title="{{ k.maskedKey }}">{{ k.maskedKey }}</span>
+            <span class="key-masked" title="{{ k.hashed_key }}">{{ k.hashed_key }}</span>
           </td>
           <td>
-            {% if k.status == 'Active' %}
+            {% if k.status.value == 'Active' %}
               <span class="badge badge-active"><i class="fas fa-check-circle"></i> Active</span>
             {% else %}
               <span class="badge badge-deactivated"><i class="fas fa-ban"></i> Deactivated</span>
             {% endif %}
           </td>
-          <td style="font-size: 13px;" title="{{ k.createdAt }}">{{ k.createdAt }}</td>
+          <td style="font-size: 13px;" title="{{ k.createdAt }}">{{ k.created_at | format_datetime }}</td>
           <td style="text-align: right;">
             <form action="/web/admin/api-keys/toggle-status" method="POST" style="display: inline;">
               <input type="hidden" name="keyId" value="{{ k.id }}">
@@ -144,17 +144,17 @@
       </tr>
     </thead>
     <tbody>
-      {% if allUsers and allUsers | length > 0 %}
-        {% for u in allUsers %}
+      {% if users and users | length > 0 %}
+        {% for u in users %}
         <tr>
           <td>
-            <div class="cell-truncate" style="font-weight: 700; color: var(--text-main);" title="{{ u.fullName }}">{{ u.fullName }}</div>
+            <div class="cell-truncate" style="font-weight: 700; color: var(--text-main);" title="{{ u.full_name }}">{{ u.full_name }}</div>
           </td>
           <td>
-            <div class="cell-truncate-lg" title="{{ u.email }}">{{ u.email }}</div>
+            <div class="cell-truncate-lg" title="{{ u.email }}">{{ u.account_email }}</div>
           </td>
           <td>
-            {% if u.role == 'Admin' %}
+            {% if u.account_role == 'Admin' %}
               <span class="badge" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
                 <i class="fas fa-user-shield"></i> Admin
               </span>
@@ -165,18 +165,18 @@
             {% endif %}
           </td>
           <td>
-            {% if u.status == 'Active' %}
+            {% if u.is_active %}
               <span class="badge badge-active"><i class="fas fa-check-circle"></i> Active</span>
             {% else %}
               <span class="badge badge-deactivated"><i class="fas fa-ban"></i> Suspended</span>
             {% endif %}
           </td>
-          <td style="font-size: 13px;" title="{{ u.createdAt }}">{{ u.createdAt }}</td>
+          <td style="font-size: 13px;" title="{{ u.createdAt }}">{{ u.created_at | format_datetime }}</td>
           <td style="text-align: right;">
-            {% if u.role != 'Admin' %}
+            {% if u.account_role.value != 'Admin' %}
             <form action="/web/admin/users/toggle-status" method="POST" style="display: inline;">
               <input type="hidden" name="userId" value="{{ u.id }}">
-              {% if u.status == 'Active' %}
+              {% if u.is_active %}
                 <button type="submit" class="btn btn-danger btn-sm">
                   <i class="fas fa-user-slash"></i> Suspend
                 </button>

@@ -13,6 +13,7 @@ class Account(SQLModel, table=True):
     account_email:str = Field(unique=True, nullable=False)
     hashed_password:str = Field(nullable=False)
     account_role:AccountRole = Field(nullable=False, default=AccountRole.MEMBER)
+    is_active:bool = Field(nullable=False, default=True)
     created_at:datetime = Field(default_factory=lambda:datetime.now(tz=timezone.utc))
     updated_at:datetime = Field(default_factory=lambda:datetime.now(tz=timezone.utc))
 
@@ -23,6 +24,7 @@ class Account(SQLModel, table=True):
 class APIKey(SQLModel, table=True):
     key_id:Optional[int] = Field(primary_key=True, default=None)
     project_name:str = Field(nullable=False)
+    description:Optional[str] = Field(nullable=True)
     hashed_api_token:str = Field(unique=True, nullable=False, index=True)
     status:APIKeyStatus = Field(nullable=False, default=APIKeyStatus.ACTIVE)
 

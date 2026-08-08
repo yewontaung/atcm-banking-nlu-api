@@ -25,5 +25,6 @@ def sign_in(form:SignInForm, session:Session) -> AuthResult:
 
     return AuthResult(
         account_id=account.account_id,
+        account_role=account.account_role,
         access_token=token
     )

@@ -33,12 +33,14 @@
         <div class="user-profile-menu">
           <div class="avatar" style="background:#ef4444; color:#fff;">A</div>
           <div class="user-meta hide-mobile-meta">
-            <span class="user-name">System Administrator</span>
-            <span class="user-role">SuperAdmin</span>
+            <span class="user-name">{{user.full_name}}</span>
+            <span class="user-role">{{user.account_role.value}}</span>
           </div>
-          <a href="/web/auth/sign-out" class="btn btn-secondary btn-sm" style="margin-left: 4px;" title="Sign Out">
+          <a id="signOutBtn" role="button" class="btn btn-secondary btn-sm" style="margin-left: 4px;" title="Sign Out">
             <i class="fas fa-sign-out-alt"></i>
           </a>
+          <form id="signOutForm" action="/web/auth/sign-out" method="post" style="display: none;"></form>
+          <script src="{{url_for('static', path='js/sign-out.js')}}"></script>
         </div>
       </div>
     </div>
@@ -51,12 +53,12 @@
         <div class="admin-section-title">Core Management</div>
         <ul class="admin-sidebar-nav">
           <li>
-            <a href="/web/admin/dashboard?view=keys" class="admin-nav-item {% if view == 'keys' or not view %}active{% endif %}">
+            <a href="/web/admin/dashboard?view=keys" class="admin-nav-item {% if request.query_params.view == 'keys' or not request.query_params.view %}active{% endif %}">
               <i class="fas fa-key" style="margin-right: 8px;"></i> API Keys
             </a>
           </li>
           <li>
-            <a href="/web/admin/dashboard?view=users" class="admin-nav-item {% if view == 'users' %}active{% endif %}">
+            <a href="/web/admin/dashboard?view=users" class="admin-nav-item {% if request.query_params.view == 'users' %}active{% endif %}">
               <i class="fas fa-users" style="margin-right: 8px;"></i> Developer Accounts
             </a>
           </li>
