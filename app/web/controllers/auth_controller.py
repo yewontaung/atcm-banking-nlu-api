@@ -9,7 +9,7 @@ from app.data.database import get_session
 from app.data.enums import AccountRole
 from app.dtos.inputs import AccountForm, SignInForm
 from app.services import account_service, auth_service
-from app.web.deps.advisor import hanle_web_exception
+from app.web.deps.advisor import handle_web_exception
 from app.web.deps.template import view
 
 
@@ -20,7 +20,7 @@ def sign_up_view(request:Request):
     return view("auth/sign-up", request)
 
 @router.post("/sign-up")
-@hanle_web_exception(redirect_url="/web/auth/sign-up")
+@handle_web_exception(redirect_url="/web/auth/sign-up")
 def sign_up(
     form:Annotated[AccountForm, Form()],
     request:Request, 
@@ -36,7 +36,7 @@ def sign_in_view(request:Request):
     return view("auth/sign-in", request)
 
 @router.post("/sign-in")
-@hanle_web_exception(redirect_url="/web/auth/sign-in")
+@handle_web_exception(redirect_url="/web/auth/sign-in")
 def sign_in(
     request:Request,
     form:Annotated[SignInForm, Form()],

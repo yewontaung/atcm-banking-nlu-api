@@ -6,7 +6,7 @@ from typing import Any, Callable
 from fastapi.responses import RedirectResponse
 
 
-def hanle_web_exception(redirect_url:str) -> Callable:
+def handle_web_exception(redirect_url:str) -> Callable:
 
     def wrapper(func:Callable[..., Any]):
 

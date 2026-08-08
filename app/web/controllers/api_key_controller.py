@@ -9,7 +9,7 @@ from app.data.database import get_session
 from app.dtos.inputs import APIKeyForm
 from app.services import api_key_service
 from app.utils.api_key_cache import API_KEY_CACHE
-from app.web.deps.advisor import hanle_web_exception
+from app.web.deps.advisor import handle_web_exception
 from app.web.deps.auth import WebAuthentication
 from app.web.deps.template import view
 
@@ -45,7 +45,7 @@ def create_view(
     return view("api-keys/create", request, context)
 
 @router.post("/create")
-@hanle_web_exception(redirect_url="/web/api-keys/create")
+@handle_web_exception(redirect_url="/web/api-keys/create")
 def create(form:Annotated[APIKeyForm, Form()], request:Request, auth:WebAuthentication, session:Session = Depends(get_session)):
     api_key = api_key_service.generate_key(form, auth.account_id, session, use_cache=True)
     return RedirectResponse(
