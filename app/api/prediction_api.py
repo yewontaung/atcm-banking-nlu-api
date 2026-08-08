@@ -4,7 +4,7 @@ from app.dtos.inputs import PredictionForm
 from app.services import prediction_service
 
 
-router = APIRouter(prefix="/predictions")
+router = APIRouter(prefix="/predict")
 
 @router.post("/")
 def predict(form:PredictionForm):

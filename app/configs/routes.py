@@ -15,5 +15,5 @@ authenticated.include_router(router=account_api.router)
 authenticated.include_router(router=api_key_api.router)
 
 nlu_router.include_router(router=test_ai_api.router)
-# from app.api import prediction_api
-# nlu_router.include_router(router=prediction_api.router)
+from app.api import prediction_api
+nlu_router.include_router(router=prediction_api.router)
