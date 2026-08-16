@@ -17,7 +17,7 @@ async def lifespan(app:FastAPI):
     from app.configs import nlu_model
     nlu_model.load_nlu(
         model_name="xlm-roberta-base",
-        saved_model_path="./_model/banking_nlu_model_02_d1014_e30.pt",
+        saved_model_path=env.MODEL_PATH,
         intent_metadata_path="./_metadata/intents.json",
         entity_metadata_path="./_metadata/entities.json",
     )
